@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>La ToDoList Collaborative</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	</head>
+	<body>
+	{{{body}}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io();
+
+		var error=$('.error');
+		var displayResult=$('#displayResult');
+		$('#todolist').hide();
+		
+		$('input[value="Valider"]').on('click',function(){
+			var input=$('input[name="pseudo"]').val();
+			if(isValid(input)){
+				socket.emit('pseudo',input);
+				$('#pseudo').hide();
+				$('#todolist').css('display','block');
+				$('#salutation').append(' '+input);
+			}
+		});
+
+		socket.on('new_client',function(pseudo){
+				$('#connectDisconnect').prepend('<p><span class="glyphicon glyphicon-user"></span> '+pseudo+' vient de se connecter.</p>');
+		});
+		
+		socket.on('departure',function(pseudo){
+				$('#connectDisconnect').prepend('<p><span class="glyphicon glyphicon-user"></span> '+pseudo+' vient de se déconnecter.</p>');
+		});
+
+		socket.on('giveTodolist',function(todolist){
+			$(displayResult).empty();
+			todolist.forEach(function(element,index){
+				$(displayResult).prepend('<li style="list-style-type:none;cursor:pointer;background-color:#ffffff;font-size:16px;" data-index='+index+'><span class="glyphicon glyphicon-remove" style="margin-right:10px;"></span>'+element+'</li>');
+				});
+		});
+		
+		$('input[value="Ajouter"]').on('click',function(){
+			var input=$('input[name="todolist"]').val();
+			if(isValid(input)){
+				socket.emit('message',input);
+				$('input[name="todolist"]').val('').focus();
+			}
+		});
+		
+		socket.on('newMessage',function(input,index){
+			$(displayResult).prepend('<li style="list-style-type:none;cursor:pointer;background-color:#ffffff;font-size:16px;" data-index='+index+'><span class="glyphicon glyphicon-remove" style="margin-right:10px;"></span>'+input+'</li>');
+		});
+
+		$('#displayResult').on('click','li',function(){
+			var index=$(this).data('index');
+			socket.emit('deleteTask',index);
+		});
+
+		function isValid(input){
+			if(input){
+				if($(error).text()){
+					$(error).empty();
+				}
+				return input;
+			}else{
+				if($(error).text()){
+					return;
+				}
+				$(error).append('Ce champ est obligatoire.');
+			}
+		}
+	</script>
+	</body>
+</html>

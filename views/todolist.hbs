@@ -1,0 +1,31 @@
+<header class="jumbotron" style="background-color:#E91E63;padding-left:35px;height:110px;padding:10px;color:white;">
+	<h1 style="font-size:25px;">La ToDoList Collaborative</h1>
+	<p>Ajouter, Supprimer et surtout partager en Temps Réel!</p>
+</header>
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-1 col-md-10 well" style="background-color:#FCE4EC;">
+			<div id="pseudo">	
+				<form class="text-center">
+					<p><input type="text" name="pseudo" placeholder="Votre pseudo" style="padding-left:10px;font-size:18px;" /></p>
+					<input type="button" value="Valider" class="btn btn-lg btn-default" />
+					<p class="text-center" style="margin-top:20px;"><span class="error" style="color:red;font-weight:bold;font-size:16px;"></span></p>
+				</form>
+			</div>
+			<div class="col-md-4" id="todolist" style="display:none;">
+				<h2 id="salutation" style="font-size:20px;">Bonjour </h2>
+				<form class="text-center">
+					<p><input type="text" name="todolist" placeholder="Ajouter une tâche" autocomplete="off" style="font-size:18px;padding-left:10px;" /></p>
+					<input type="button" value="Ajouter" class="btn btn-lg btn-default" />
+					<p class="text-center" style="margin-top:20px;"><span class="error" style="color:red;font-weight:bold;font-size:16px;"></span></p>
+				</form>
+			</div>
+			<div class="col-md-5">
+			<ul id="displayResult">
+			</ul>
+			</div>
+			<div class="col-md-3" id="connectDisconnect">
+			</div>
+	</div>
+</div>
+</div>
